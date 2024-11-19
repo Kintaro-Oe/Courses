@@ -5,6 +5,6 @@ import androidx.annotation.StringRes
 
 data class Topic(
     @StringRes val subjectID: Int,
-    val courseCount: Int,
+    val availableCourseCount: Int,
     @DrawableRes val imageId: Int,
 )

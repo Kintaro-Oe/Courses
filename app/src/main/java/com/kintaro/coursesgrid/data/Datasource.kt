@@ -1,5 +1,6 @@
-package com.kintaro.coursesgrid
+package com.kintaro.coursesgrid.data
 
+import com.kintaro.coursesgrid.R
 import com.kintaro.coursesgrid.model.Topic
 
 object DataSource {
