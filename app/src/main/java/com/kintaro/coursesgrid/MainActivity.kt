@@ -6,15 +6,27 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.captionBar
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,18 +48,46 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CoursesGridTheme {
-                Courses(
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
+                CoursesApp()
             }
         }
     }
 }
 
 @Composable
-fun Courses(modifier: Modifier = Modifier) {
+fun CoursesApp() {
+    Spacer(
+        Modifier
+            .windowInsetsTopHeight(WindowInsets.statusBars)
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.secondary)
+    )
+    TopicGrid(
+        topicList = DataSource.topics,
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.statusBars)
+            .windowInsetsPadding(WindowInsets.captionBar)
+//            .safeDrawingPadding()
+    )
+}
 
+@Composable
+fun TopicGrid(
+    topicList: List<Topic>,
+    modifier: Modifier = Modifier
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier
+            .padding(start = 8.dp, top = 8.dp, end = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(topicList) {
+            topic -> TopicCard(topic)
+        }
+    }
 }
 
 @Composable
@@ -60,7 +101,7 @@ fun TopicCard(
         Row(
             modifier= Modifier
                 .background(MaterialTheme.colorScheme.secondaryContainer)
-//                .fillMaxWidth()
+                .fillMaxWidth()
         ) {
             Image(
                 painter = painterResource(topic.imageId),
@@ -105,10 +146,9 @@ private fun TopicPreview() {
 //    TopicCard(Topic(R.string.tech, 118, R.drawable.tech))
     TopicCard(Topic(R.string.photography, 321, R.drawable.photography))
 }
-//@Preview(showBackground = true)
-//@Composable
-//fun CoursesPreview() {
-//    CoursesGridTheme {
-//        Courses()
-//    }
-//}
+
+@Preview(showBackground = true)
+@Composable
+fun TopicGridPreview() {
+    TopicGrid(DataSource.topics)
+}
